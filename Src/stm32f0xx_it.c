@@ -145,27 +145,36 @@ void SysTick_Handler(void)
 void EXTI2_3_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI2_3_IRQn 0 */
-  LL_mDelay(50);
-	while(!(GPIOA->IDR & GPIO_IDR_3))
-	{
-		
-		if (!(GPIOA->IDR & GPIO_IDR_4))
-		{
-			PWM = 2399;
-		}
-		if (!(GPIOA->IDR & GPIO_IDR_3) && PWM < 2399)
-		{
-			PWM++;
-			TIM3->CCR1 = PWM;
-			LL_mDelay(10);
-		}
-	}
+  
   /* USER CODE END EXTI2_3_IRQn 0 */
   if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_3) != RESET)
   {
     LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_3);
     /* USER CODE BEGIN LL_EXTI_LINE_3 */
-    
+	  LL_mDelay(50);
+	  while (!(GPIOA->IDR & GPIO_IDR_3))
+	  {
+		
+		  if (!(GPIOA->IDR & GPIO_IDR_4))
+		  {
+			  PWM = 0;
+			  TIM3->CCR1 = PWM;
+		  	  LL_mDelay(20);
+		  }
+		  if (!(GPIOA->IDR & GPIO_IDR_3) && PWM > 0)
+		  {
+			  PWM = PWM - 2;
+			  if (TIM3->CCR1 <= 0)
+			  {
+				  PWM = 0;
+			  }
+		  	
+			  TIM3->CCR1 = PWM;
+			  LL_mDelay(20);
+			  //LL_mDelay(10);
+		  }
+
+	  }
     /* USER CODE END LL_EXTI_LINE_3 */
   }
   /* USER CODE BEGIN EXTI2_3_IRQn 1 */
@@ -179,29 +188,36 @@ void EXTI2_3_IRQHandler(void)
 void EXTI4_15_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI4_15_IRQn 0 */
-	LL_mDelay(50);
-	while(!(GPIOA->IDR & GPIO_IDR_4))
-	{
-		
-		if (!(GPIOA->IDR & GPIO_IDR_3))
-		{
-			PWM = 0;
-		}
-		if (!(GPIOA->IDR & GPIO_IDR_4) && PWM > 0)
-		{
-			PWM--;
-			TIM3->CCR1 = PWM;
-			LL_mDelay(10);
-		}
 
-	}
 	/* USE
   /* USER CODE END EXTI4_15_IRQn 0 */
   if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_4) != RESET)
   {
     LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_4);
     /* USER CODE BEGIN LL_EXTI_LINE_4 */
-    
+	  LL_mDelay(50);
+	  while (!READ_BIT(GPIOA->IDR, GPIO_IDR_4))
+	  {
+		
+		  if (!(GPIOA->IDR & GPIO_IDR_3))
+		  {
+			  PWM = 2400;
+			  TIM3->CCR1 = PWM;
+			  LL_mDelay(20);
+		  }
+		  if (!(GPIOA->IDR & GPIO_IDR_4) && PWM < 2399)
+		  {
+			  PWM = PWM + 2;
+			  if (TIM3->CCR1 >= 2400)
+			  {
+				  PWM = 2400;
+			  }
+		  	
+			  TIM3->CCR1 = PWM;
+			  LL_mDelay(20);
+			  //LL_mDelay(10);
+		  }
+	  }
     /* USER CODE END LL_EXTI_LINE_4 */
   }
   /* USER CODE BEGIN EXTI4_15_IRQn 1 */

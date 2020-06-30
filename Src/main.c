@@ -116,7 +116,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		TIM3->CCR1 = PWM;
+
+  	
+
+  	
   }
   /* USER CODE END 3 */
 }
